@@ -4,6 +4,8 @@
 # Specifically ignore the secrets.toml file
 .streamlit/secrets.toml
 
+venv2
+
 .DS_Store
 .huskyrc.json
 out

@@ -21,7 +21,7 @@ def main():
     st.session_state['loggedIn'] = False
 
   if not st.session_state['loggedIn']:
-    st.title("Dashboard Fábrica de Bares")
+    st.title("Ferramenta para Contagem de Estoque")
     st.write("Insira seus dados de login:")
     userName = st.text_input(label=" ", value="", placeholder="Email")
     password = st.text_input(label=" ", value="", placeholder="Senha", type="password")
