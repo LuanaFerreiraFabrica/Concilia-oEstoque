@@ -7,7 +7,6 @@ LOGGER = get_logger(__name__)
 
 def mysql_connection():
   mysql_config = st.secrets["mysql"]
-  # Cria a conexão com MySQL
   conn = mysql.connector.connect(
     host=mysql_config['host'],
     port=mysql_config['port'],
@@ -57,7 +56,7 @@ def GET_USERNAME(email):
 def GET_LOJAS():
   return dataframe_query(f'''
   SELECT 
-    te.ID,
+    te.ID AS 'ID Loja',
 	  te.NOME_FANTASIA AS 'Loja'
   FROM
 	  T_EMPRESAS te 
@@ -75,3 +74,25 @@ def GET_INSUMOS():
   WHERE tin.VM_ACTIVE = 1
   ORDER BY tin.DESCRICAO 
 ''')
+
+
+def insert_into_contagem_insumos(fk_empresa, fk_insumo, quantidade_insumo, data_contagem):
+    conn = mysql_connection()
+    cursor = conn.cursor()
+
+    query = """
+    INSERT INTO T_CONTAGEM_INSUMOS (FK_EMPRESA, FK_INSUMO, QUANTIDADE_INSUMO, DATA_CONTAGEM)
+    VALUES (%s, %s, %s, %s)
+    """
+    
+    values = (fk_empresa, fk_insumo, quantidade_insumo, data_contagem)
+
+    try:
+        cursor.execute(query, values)
+        conn.commit()  # Confirma a transação
+        st.success('Inserção realizada com sucesso!')
+    except mysql.connector.Error as err:
+        st.error(f'Erro: {err}')
+    finally:
+        cursor.close()
+        conn.close()
