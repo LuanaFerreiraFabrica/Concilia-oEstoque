@@ -36,6 +36,7 @@ st.title("Contagem de Estoque")
 df_lojas = GET_LOJAS()
 lojas = df_lojas['Loja'].tolist()
 loja_ids = dict(zip(df_lojas['Loja'], df_lojas['ID Loja']))
+         
 
 # Se o DataFrame de insumos não está no estado de sessão, reseta as quantidades
 if 'df_insumos' not in st.session_state:
@@ -48,11 +49,10 @@ with col1:
 with col2:
   data_contagem = st.date_input('Data da Contagem:', value=datetime.today(), key='data_input', format="DD/MM/YYYY")
 
-row_height = 34.2
-total_height = int(len(df_insumos) * (row_height + 1))
 col1, col2, col3 = st.columns([1, 7, 1])
 with col2:
-  df_editado = st.data_editor(df_insumos, disabled=("ID Insumo", "Nome Insumo"), width=1000, height=total_height, key="data_editor", hide_index=True)
+    df_editado = st.data_editor(df_insumos, disabled=("ID Insumo", "Nome Insumo", "Unidade de Medida"), width=1000, height=25000, key="data_editor", hide_index=True)
+
 
 # Botão para registrar a contagem
 if st.button("Registrar Contagem", key="registrar"):

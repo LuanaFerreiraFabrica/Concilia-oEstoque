@@ -69,30 +69,32 @@ def GET_INSUMOS():
   return dataframe_query(f'''
   SELECT 
 	  tin.ID AS 'ID Insumo',
-  	tin.DESCRICAO AS 'Nome Insumo'
+  	tin.DESCRICAO AS 'Nome Insumo',
+  	tudm.UNIDADE_MEDIDA AS 'Unidade de Medida'
   FROM T_INSUMOS_NIVEL_5 tin
+  LEFT JOIN T_UNIDADES_DE_MEDIDAS tudm ON tin.FK_UNIDADE_MEDIDA = tudm.ID
   WHERE tin.VM_ACTIVE = 1
   ORDER BY tin.DESCRICAO 
 ''')
 
 
 def insert_into_contagem_insumos(fk_empresa, fk_insumo, quantidade_insumo, data_contagem):
-    conn = mysql_connection()
-    cursor = conn.cursor()
+  conn = mysql_connection()
+  cursor = conn.cursor()
 
-    query = """
-    INSERT INTO T_CONTAGEM_INSUMOS (FK_EMPRESA, FK_INSUMO, QUANTIDADE_INSUMO, DATA_CONTAGEM)
-    VALUES (%s, %s, %s, %s)
-    """
-    
-    values = (fk_empresa, fk_insumo, quantidade_insumo, data_contagem)
+  query = """
+  INSERT INTO T_CONTAGEM_INSUMOS (FK_EMPRESA, FK_INSUMO, QUANTIDADE_INSUMO, DATA_CONTAGEM)
+  VALUES (%s, %s, %s, %s)
+  """
+  
+  values = (fk_empresa, fk_insumo, quantidade_insumo, data_contagem)
 
-    try:
-        cursor.execute(query, values)
-        conn.commit()  # Confirma a transação
-        st.success('Inserção realizada com sucesso!')
-    except mysql.connector.Error as err:
-        st.error(f'Erro: {err}')
-    finally:
-        cursor.close()
-        conn.close()
+  try:
+    cursor.execute(query, values)
+    conn.commit()  # Confirma a transação
+    st.success('Inserção realizada com sucesso!')
+  except mysql.connector.Error as err:
+    st.error(f'Erro: {err}')
+  finally:
+    cursor.close()
+    conn.close()
